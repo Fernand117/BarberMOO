@@ -34,6 +34,9 @@ public class Cliente : IUsuario
 
     public bool SerBarbero()
     {
-        return true;
+        Barbero barbero = new Barbero();
+        barbero.Rol = "Administrador";
+        barbero.isBarbero = true;
+        return barbero.isBarbero;
     }
 }

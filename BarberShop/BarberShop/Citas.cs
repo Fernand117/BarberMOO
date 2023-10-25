@@ -6,7 +6,7 @@ public class Citas
     public DateTime Fecha { get; set; }
     public string Status { get; set; }
     
-    private readonly List<Citas> listaCitas = new List<Citas>();
+    public readonly List<Citas> listaCitas = new List<Citas>();
 
     public Citas AgendarCita()
     {
