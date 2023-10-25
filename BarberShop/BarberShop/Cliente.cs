@@ -15,7 +15,9 @@ public class Cliente : IUsuario
 
     public Citas AgendarCita()
     {
-        return new Citas().AgendarCita();
+        Citas citas = new Citas();
+        citas.AgendarCita();
+        return citas;
     }
 
     public string CerrarSesion()
