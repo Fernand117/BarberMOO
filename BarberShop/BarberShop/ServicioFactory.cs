@@ -4,7 +4,6 @@ public class ServicioFactory
 {
     public void AgregarServicio(string tipoServicio, int id, string nombre, string descripcion, float precio, string tipo, string imagen, Producto producto)
     {
-        IServicio servicio;
         switch (tipoServicio)
         {
             case "Barba":

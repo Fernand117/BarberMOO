@@ -3,9 +3,9 @@ namespace BarberShop;
 public class Cliente : IUsuario
 {
     public int Id { get; set; }
-    public string Usuario { get; set; }
-    public string Correo { get; set; }
-    public string Password { get; set; }
+    public string Usuario { get; set; } = string.Empty;
+    public string Correo { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
     
     public string IniciarSesion(string usuario, string password)
     {
