@@ -19,6 +19,16 @@ public class BarbaServicio : IServicio
         Tipo = tipo;
         Imagen = imagen;
     }
+
+    public Producto GetProduct(int id)
+    {
+        var producto = ProductosList.Find(x => x.Id == id);
+        return new Producto()
+        {
+            Id = producto!.Id,
+            Nombre = producto!.Nombre
+        };
+    }
     
     public List<Producto> AgregarProducto(Producto producto)
     {
