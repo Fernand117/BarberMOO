@@ -12,10 +12,19 @@ public class Citas
     {
         Random idRandom = new Random();
         
-        Payments payments = new Payments();
-        int payment = payments.Pagar(idRandom.Next());
+        var payments = new Payments
+        {
+            Id = idRandom.Next(),
+            Monto = idRandom.Next()
+        };
 
-        Console.WriteLine("Pago realizado por la cantidad de: $" + payment + "MXN");
+        var mastercardPayment = new MastercardDecorator(payments);
+        mastercardPayment.Pay(idRandom.Next());
+
+        var visaPayment = new VisaDecorator(payments);
+        visaPayment.Pay(idRandom.Next());
+
+        Console.WriteLine("Pago realizado por la cantidad de: $" + payments.Monto + "MXN");
 
         Citas citas = new Citas()
         {
