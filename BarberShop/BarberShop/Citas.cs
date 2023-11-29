@@ -1,60 +1,95 @@
 namespace BarberShop;
 
-public class Citas
+// Interfaz para el iterador de citas
+public interface IIterator
 {
-    public int Id { get; set; }
-    public DateTime Fecha { get; set; }
-    public string Status { get; set; } = string.Empty;
-    
-    public readonly List<Citas> listaCitas = new List<Citas>();
+    bool HasNext();
+    DateTime Next();
+}
 
-    public Citas AgendarCita()
+// Interfaz para la colección de citas
+public interface ICitasCollection
+{
+    void AgendarCita(DateTime fecha);
+    void ListaCitas();
+    IIterator CreateIterator();
+    // Otros métodos relevantes...
+}
+
+// Implementación base de la colección de citas
+public class Citas : ICitasCollection
+{
+    private List<DateTime> citas = new List<DateTime>();
+
+    public void Pagar(int monto)
     {
-        Random idRandom = new Random();
-        
-        var payments = new Payments
+        // Crear una instancia de Payments
+        var payment = new Payments { Id = 1, Monto = monto };
+
+        // Decorar con Mastercard
+        var mastercardPayment = new MastercardDecorator(payment);
+        mastercardPayment.Pay(monto);
+
+        // Decorar con Visa
+        var visaPayment = new VisaDecorator(payment);
+        visaPayment.Pay(monto);
+    }
+
+    public void AgendarCita(DateTime fecha)
+    {
+        citas.Add(fecha);
+        Console.WriteLine($"Cita agendada para el {fecha}");
+    }
+
+    public void ListaCitas()
+    {
+        Console.WriteLine("Lista de Citas:");
+        foreach (var fecha in citas)
         {
-            Id = idRandom.Next(),
-            Monto = idRandom.Next()
-        };
+            Console.WriteLine($" - {fecha}");
+        }
+    }
 
-        var mastercardPayment = new MastercardDecorator(payments);
-        mastercardPayment.Pay(idRandom.Next());
+    public IIterator CreateIterator()
+    {
+        return new CitasIterator(this);
+    }
 
-        var visaPayment = new VisaDecorator(payments);
-        visaPayment.Pay(idRandom.Next());
-
-        Console.WriteLine("Pago realizado por la cantidad de: $" + payments.Monto + "MXN");
-
-        Citas citas = new Citas()
-        {
-            Id = idRandom.Next(),
-            Fecha = new DateTime(),
-            Status = "Agendada"
-        };
-        
-        listaCitas.Add(citas);
-        
+    public List<DateTime> GetCitas()
+    {
         return citas;
     }
+    // Otros métodos de Citas...
+}
 
-    public string RecordarCita(Citas citas)
+// Implementación del iterador de citas
+public class CitasIterator : IIterator
+{
+    private Citas citasCollection;
+    private int index = 0;
+
+    public CitasIterator(Citas citasCollection)
     {
-        var citaActual = listaCitas.Find(x => x.Id == citas.Id);
-        return "Usted tiene un cita pendiente Id: " + citaActual!.Id + " con Fecha: " + citaActual.Fecha;
+        this.citasCollection = citasCollection;
     }
 
-    public string VencerCita(Citas citas)
+    public bool HasNext()
     {
-        var citaActual = listaCitas.Find(x => x.Id == citas.Id);
-        citaActual!.Status = "Cita vencida";
-
-        return "Cita " + citaActual.Id + " vencida";
+        return index < citasCollection.GetCitas().Count;
     }
 
-    public string CancelarCita(Citas citas)
+    public DateTime Next()
     {
-        listaCitas.Remove(listaCitas.Find(x => x.Id == citas.Id));
-        return "Cita " + citas.Id + " eliminada.";
+        if (HasNext())
+        {
+            DateTime cita = citasCollection.GetCitas()[index];
+            index++;
+            return cita;
+        }
+        else
+        {
+            return default(DateTime); // o lanza una excepción, dependiendo de tus requerimientos
+        }
     }
 }
+

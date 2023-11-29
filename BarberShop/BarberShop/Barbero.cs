@@ -6,10 +6,14 @@ public class Barbero
     public bool isBarbero { get; set; }
     public List<Sucursal> listaSucursales = new List<Sucursal>();
 
-    public void VerificarCita(Citas citas)
+    public void VerificarCita(ICitasCollection citas)
     {
-        var citaActual = citas.listaCitas.Find(x => x.Id == citas.Id);
-        Console.WriteLine("Cita con Id: " + citaActual!.Id + " verificada");
+        var iterator = citas.CreateIterator();
+        while (iterator.HasNext())
+        {
+            var cita = iterator.Next();
+            Console.WriteLine($"Cita: {cita}");
+        }
     }
 
     public void AgregarSucursal(string nombreSucursal, string direccion)

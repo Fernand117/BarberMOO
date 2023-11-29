@@ -13,10 +13,12 @@ public class Cliente : IUsuario
         return "Bienvenido " + usuario;
     }
 
-    public Citas AgendarCita()
+    public ICitasCollection AgendarCita()
     {
-        Citas citas = new Citas();
-        citas.AgendarCita();
+        ICitasCollection citas = new Citas();
+        citas.AgendarCita(DateTime.Now.AddDays(1));
+        citas.AgendarCita(DateTime.Now.AddDays(6));
+        citas.AgendarCita(DateTime.Now.AddDays(17));
         return citas;
     }
 

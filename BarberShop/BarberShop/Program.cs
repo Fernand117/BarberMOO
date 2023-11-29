@@ -15,15 +15,24 @@ public class Program
         Console.Write("Ingrese su contraseña: ");
         cliente.Password = Console.ReadLine()!.ToString();
 
-        Citas cita = cliente.AgendarCita();
-        cita.AgendarCita();
+        // Crear instancia de Citas
+        ICitasCollection citas = new Citas();
         
-        foreach (var item in cita.listaCitas)
+        // Agendar algunas citas
+        citas.AgendarCita(DateTime.Now.AddDays(1));
+        citas.AgendarCita(DateTime.Now.AddDays(7));
+        citas.AgendarCita(DateTime.Now.AddDays(14));
+
+        // Obtener el iterador y recorrer las citas
+        var iterator = citas.CreateIterator();
+        while (iterator.HasNext())
         {
-            Console.WriteLine("Cita id: " + item.Id);
-            Console.WriteLine("Cita fecha: " + item.Fecha);
-            Console.WriteLine("Cita status: " + item.Status);
+            var cita = iterator.Next();
+            Console.WriteLine($"Cita: {cita}");
         }
+
+        Citas citaPay = new Citas();
+        citaPay.Pagar(150);
         
         bool isBarbero = cliente.SerBarbero();
         Console.WriteLine("Opción de ser barbero en: " + isBarbero);
